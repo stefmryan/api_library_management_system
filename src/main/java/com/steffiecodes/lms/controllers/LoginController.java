@@ -1,4 +1,4 @@
-package com.steffiecodes.lms;
+package com.steffiecodes.lms.controllers;
 
 import com.steffiecodes.lms.models.AuthenticationRequest;
 import com.steffiecodes.lms.models.AuthenticationResponse;
