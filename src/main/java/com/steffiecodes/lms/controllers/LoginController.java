@@ -5,6 +5,8 @@ import com.steffiecodes.lms.models.AuthenticationResponse;
 import com.steffiecodes.lms.services.MyUserDetailsService;
 import com.steffiecodes.lms.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,7 +14,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", maxAge = 3600)
 @RestController
 public class LoginController {
     @Autowired
@@ -33,7 +38,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()
@@ -45,6 +50,10 @@ public class LoginController {
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        Cookie cookie = new Cookie("LibraryCookie", jwt);
+        cookie.setMaxAge(60*60*2);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+       return ResponseEntity.ok(authenticationRequest);
     }
 }
