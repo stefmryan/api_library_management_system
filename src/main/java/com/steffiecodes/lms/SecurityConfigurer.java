@@ -49,19 +49,20 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 
                 //everyone can call /authentic any other requests need to be authenticated first
-//                .authorizeRequests().antMatchers("/authenticate").permitAll()
-//                .anyRequest().authenticated()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/authenticate").permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/library-accounts/**").hasAuthority("MANAGER")
+                .antMatchers("/library-accounts/**", "/checkout/**").hasAuthority("MANAGER")
                 .anyRequest().authenticated()
 
                 //tells spring security
                 //not to create a session
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
+
 
 
 

@@ -13,7 +13,7 @@ public interface LibraryAccountService {
 
     ResponseEntity<String> addLibraryAccount(LibraryAccount newLibraryAccount);
 
-    LibraryAccount getLibraryAccountByLibraryAccountNumber(Integer libraryAccountNumber);
+    LibraryAccount getAccountByNumberOrName(String libraryAccountData);
 
     ResponseEntity<Catalog> putCheckOut(LibraryAccount libraryAccount, long itemBarcode);
 

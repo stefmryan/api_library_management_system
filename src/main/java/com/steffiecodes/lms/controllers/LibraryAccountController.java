@@ -27,10 +27,10 @@ public class LibraryAccountController {
         return libraryAccountService.getLibraryAccounts();
     }
 
-    @GetMapping("/library-accounts/{libraryAccountNumber}")
-    public LibraryAccount getLibraryAccountByLibraryAccountNumber(@PathVariable Integer libraryAccountNumber) {
-        logger.info("Request for Library Account " + libraryAccountNumber);
-        return libraryAccountService.getLibraryAccountByLibraryAccountNumber(libraryAccountNumber);
+    @GetMapping("/library-accounts/account")
+    public LibraryAccount getAccountByNumberOrName(@RequestParam String id) {
+        logger.info("Request for Library Account " + id);
+        return libraryAccountService.getAccountByNumberOrName(id);
     }
 
     @PostMapping("/register")

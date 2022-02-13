@@ -23,12 +23,34 @@ public class LibraryAccountServiceImpl implements LibraryAccountService {
     @Autowired
     CatalogRepository catalogRepository;
 
+    public final boolean containsDigit(String s) {
+        boolean containsDigit = false;
+
+        if (s != null && !s.isEmpty()) {
+            for (char c : s.toCharArray()) {
+                if (containsDigit = Character.isDigit(c)) {
+                    break;
+                }
+            }
+        }
+
+        return containsDigit;
+    }
+
     public List<LibraryAccount> getLibraryAccounts() {
         return libraryAccountRepository.findAll();
     }
 
-    public LibraryAccount getLibraryAccountByLibraryAccountNumber(Integer libraryAccountNumber) {
-        return libraryAccountRepository.findByLibraryAccountNumber(libraryAccountNumber);
+    public LibraryAccount getAccountByNumberOrName(String libraryAccountData) {
+        boolean digitExists = containsDigit(libraryAccountData);
+        if(digitExists) {
+            int libraryAccountNumber = Integer.parseInt(libraryAccountData);
+            return libraryAccountRepository.findByLibraryAccountNumber(libraryAccountNumber);
+        } else {
+            String firstName = libraryAccountData.substring(0, libraryAccountData.indexOf(' '));
+            String lastName = libraryAccountData.substring(libraryAccountData.indexOf(' ') + 1);
+            return libraryAccountRepository.findByFirstNameAndLastName(firstName, lastName);
+        }
     }
 
     public ResponseEntity<String> addLibraryAccount(LibraryAccount newLibraryAccount) {

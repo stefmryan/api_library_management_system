@@ -10,4 +10,5 @@ public interface LibraryAccountRepository extends JpaRepository<LibraryAccount, 
     boolean existsByIdNumber(String idNumber);
 
     LibraryAccount findByLibraryAccountNumber(Integer libraryAccountNumber);
+    LibraryAccount findByFirstNameAndLastName(String firstName, String lastName);
 }
