@@ -4,6 +4,7 @@ import com.steffiecodes.lms.filters.JwtRequestFilter;
 import com.steffiecodes.lms.services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,8 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
@@ -39,17 +43,28 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     //this method will ignore being authenticated before calling authentication
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.cors().and().csrf().disable();
+        http
+                ///adds jwtrequestfilter to this configure method, method comes before upaf filter is called
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+
                 //everyone can call /authentic any other requests need to be authenticated first
-                .authorizeRequests().antMatchers("/authenticate").permitAll()
+//                .authorizeRequests().antMatchers("/authenticate").permitAll()
+//                .anyRequest().authenticated()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST,"/authenticate").permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/library-accounts/**").hasAuthority("MANAGER")
                 .anyRequest().authenticated()
+
                 //tells spring security
                 //not to create a session
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        ///adds jwtrequestfilter to this configure method, method comes before upaf filter is called
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+
     }
 
     @Override
@@ -65,15 +80,22 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
-                        .allowedOrigins("http://localhost:3000");
-            }
-        };
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.setAllowedMethods(Arrays.asList(
+                HttpMethod.GET.name(),
+                HttpMethod.HEAD.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name()));
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        corsConfiguration.setMaxAge(1800L);
+        source.registerCorsConfiguration("/**", corsConfiguration); // you restrict your path here
+        return source;
     }
 
 
