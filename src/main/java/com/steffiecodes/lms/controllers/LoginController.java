@@ -52,8 +52,8 @@ public class LoginController {
        return ResponseEntity.ok(authenticationRequest);
     }
 
-    @GetMapping(value = "/logout")
-    public ResponseEntity<?> getLogout(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws Exception {
+    @GetMapping(value = "/signout")
+    public ResponseEntity getLogout(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws Exception {
 
         SecurityContext context = SecurityContextHolder.getContext();
         SecurityContextHolder.clearContext();

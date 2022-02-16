@@ -51,6 +51,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //everyone can call /authentic any other requests need to be authenticated first
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/authenticate").permitAll()
+                .antMatchers(HttpMethod.GET,"/signout").permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/library-accounts/**", "/checkout/**").hasAuthority("MANAGER")
