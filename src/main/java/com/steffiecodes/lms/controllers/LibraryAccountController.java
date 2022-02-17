@@ -28,9 +28,9 @@ public class LibraryAccountController {
     }
 
     @GetMapping("/library-accounts/account")
-    public LibraryAccount getAccountByNumberOrName(@RequestParam String id) {
-        logger.info("Request for Library Account " + id);
-        return libraryAccountService.getAccountByNumberOrName(id);
+    public ResponseEntity<List<LibraryAccount>> getAccountByNumberOrName(@RequestParam String accountData) {
+        logger.info("Request for Library Account " + accountData);
+        return libraryAccountService.getAccountByNumberOrName(accountData);
     }
 
     @PostMapping("/register")

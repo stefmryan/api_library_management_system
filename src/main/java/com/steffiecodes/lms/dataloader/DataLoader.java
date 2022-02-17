@@ -76,13 +76,14 @@ public class DataLoader implements CommandLineRunner {
         Catalog book4 = new Catalog(987657890, "The Shining", "Stephen King", null, true, null, 0);
         Catalog book5 = new Catalog(234576543, "Flowers for Algernon", "Daniel Keyes", null, true, null, 0);
         Catalog book6 = new Catalog(78654777, "Lord of the Rings", "J.R.R. Tolkien", null, true, null, 0);
+        Catalog book7 = new Catalog(77754321, "SlaughterHouse Five", "Kurt Vonnegut, Jr", null, true, null, 0);
 
-        initialTestCatalogLoader.add(book1);
-        initialTestCatalogLoader.add(book2);
-        initialTestCatalogLoader.add(book3);
-        initialTestCatalogLoader.add(book4);
-        initialTestCatalogLoader.add(book5);
-        initialTestCatalogLoader.add(book6);
+        initialTestCatalogLoader.addAll(Arrays.asList(book1, book2, book3, book4, book5, book6, book7));
+//        initialTestCatalogLoader.add(book2);
+//        initialTestCatalogLoader.add(book3);
+//        initialTestCatalogLoader.add(book4);
+//        initialTestCatalogLoader.add(book5);
+//        initialTestCatalogLoader.add(book6);
 
         catalogRepository.saveAll(initialTestCatalogLoader);
     }
@@ -91,14 +92,6 @@ public class DataLoader implements CommandLineRunner {
         LocalDate date1 = LocalDate.of(1997, 02, 9);
         LocalDate date2 = LocalDate.of(1967, 06, 28);
         LocalDate date3 = LocalDate.of(2014, 10, 31);
-
-//        List<Catalog> initialTestCatalogLoader = new ArrayList<>();
-//
-//        Catalog book1 = new Catalog(98765432, "The Fault In Our Stars", "John Green", null, true, null);
-//        Catalog book2 = new Catalog(1234567, "Harry Potter and The Sorceror's Stone", "J.K. Rowling", null, true, null);
-//
-//        initialTestCatalogLoader.add(book1);
-//        initialTestCatalogLoader.add(book2);
 
         //Object Arrays
         List<County> countyObjectList = new ArrayList<>();
@@ -126,6 +119,12 @@ public class DataLoader implements CommandLineRunner {
                 "", "MainVille", "OR", "99876",
                 countyObjectList.get(1), accountTypeObjectList.get(1), null);
 
+        LibraryAccount betty2 = new LibraryAccount(77755, "BabyBetty@fakeEmail.com",
+                "Betty", "Barnes",
+                "321-345-765", date1, "555-555-5577", "777 Lucky Ave",
+                "Apt 2B", "London", "OR", "99876",
+                countyObjectList.get(1), accountTypeObjectList.get(0), null);
+
         LibraryAccount james = new LibraryAccount(54321, "jamesPatterson@fakeEmail.com",
                 "James", "Patterson",
                 "321-546-987", date2, "555-555-0987", "3245 Oak Ave.",
@@ -139,6 +138,7 @@ public class DataLoader implements CommandLineRunner {
                 countyObjectList.get(2), accountTypeObjectList.get(2), null);
 
         initialTestLibraryAccountLoader.add(betty);
+        initialTestLibraryAccountLoader.add(betty2);
         initialTestLibraryAccountLoader.add(james);
         initialTestLibraryAccountLoader.add(izzy);
 

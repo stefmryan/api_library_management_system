@@ -41,15 +41,27 @@ public class LibraryAccountServiceImpl implements LibraryAccountService {
         return libraryAccountRepository.findAll();
     }
 
-    public LibraryAccount getAccountByNumberOrName(String libraryAccountData) {
+    public ResponseEntity<List<LibraryAccount>> getAccountByNumberOrName(String libraryAccountData) {
         boolean digitExists = containsDigit(libraryAccountData);
-        if(digitExists) {
+        List<LibraryAccount> requestedAccount = new ArrayList<LibraryAccount>();
+
+        if (digitExists) {
             int libraryAccountNumber = Integer.parseInt(libraryAccountData);
-            return libraryAccountRepository.findByLibraryAccountNumber(libraryAccountNumber);
+            LibraryAccount account = libraryAccountRepository.findByLibraryAccountNumber(libraryAccountNumber);
+            if (account == null) {
+                return ResponseEntity.notFound().build();
+            }
+            requestedAccount.add(account);
+            return ResponseEntity.ok(requestedAccount);
+
         } else {
             String firstName = libraryAccountData.substring(0, libraryAccountData.indexOf(' '));
             String lastName = libraryAccountData.substring(libraryAccountData.indexOf(' ') + 1);
-            return libraryAccountRepository.findByFirstNameAndLastName(firstName, lastName);
+            List<LibraryAccount> listOfAccts = libraryAccountRepository.findByFirstNameAndLastName(firstName, lastName);
+            if (listOfAccts.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(listOfAccts);
         }
     }
 
@@ -139,7 +151,7 @@ public class LibraryAccountServiceImpl implements LibraryAccountService {
         LibraryAccount account = libraryAccountRepository.findByLibraryAccountNumber(libraryAccountNumber);
         List<Catalog> hasBookList = account.getBooks();
 
-        if(itemList.isEmpty() && !hasBookList.isEmpty()){
+        if (itemList.isEmpty() && !hasBookList.isEmpty()) {
             libraryAccount.setBooks(hasBookList);
         }
         return libraryAccountRepository.findById(id)
@@ -197,12 +209,12 @@ public class LibraryAccountServiceImpl implements LibraryAccountService {
         return ResponseEntity.ok(item);
     }
 
-    public ResponseEntity<List<Long>> putCheckInItem(List<Long> itemBarcodes){
+    public ResponseEntity<List<Long>> putCheckInItem(List<Long> itemBarcodes) {
         List<Long> barcodeDoesNotExist = new ArrayList<Long>();
-        if(itemBarcodes.isEmpty()){
+        if (itemBarcodes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        for(long barcode : itemBarcodes) {
+        for (long barcode : itemBarcodes) {
             boolean itemExists = catalogRepository.existsByBarcode(barcode);
             if (!itemExists) {
                 barcodeDoesNotExist.add(barcode);
@@ -226,7 +238,7 @@ public class LibraryAccountServiceImpl implements LibraryAccountService {
 
             }
         }
-        if(!barcodeDoesNotExist.isEmpty()){
+        if (!barcodeDoesNotExist.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(barcodeDoesNotExist);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(barcodeDoesNotExist);
