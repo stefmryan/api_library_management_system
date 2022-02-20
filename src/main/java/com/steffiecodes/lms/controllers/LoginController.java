@@ -49,11 +49,11 @@ public class LoginController {
         cookie.setMaxAge(60*60*2);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
-       return ResponseEntity.ok(authenticationRequest);
+       return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/signout")
-    public ResponseEntity getLogout(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws Exception {
+    public ResponseEntity getLogout(HttpServletResponse response) throws Exception {
 
         SecurityContext context = SecurityContextHolder.getContext();
         SecurityContextHolder.clearContext();

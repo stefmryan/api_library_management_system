@@ -79,11 +79,6 @@ public class DataLoader implements CommandLineRunner {
         Catalog book7 = new Catalog(77754321, "SlaughterHouse Five", "Kurt Vonnegut, Jr", null, true, null, 0);
 
         initialTestCatalogLoader.addAll(Arrays.asList(book1, book2, book3, book4, book5, book6, book7));
-//        initialTestCatalogLoader.add(book2);
-//        initialTestCatalogLoader.add(book3);
-//        initialTestCatalogLoader.add(book4);
-//        initialTestCatalogLoader.add(book5);
-//        initialTestCatalogLoader.add(book6);
 
         catalogRepository.saveAll(initialTestCatalogLoader);
     }

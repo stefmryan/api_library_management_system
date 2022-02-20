@@ -54,7 +54,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/signout").permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/library-accounts/**", "/checkout/**").hasAuthority("MANAGER")
+                .antMatchers("/library-accounts/**", "/checkout/**", "/catalog/**").hasAuthority("MANAGER")
                 .anyRequest().authenticated()
 
                 //tells spring security
