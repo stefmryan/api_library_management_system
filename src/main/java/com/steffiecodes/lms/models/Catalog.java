@@ -24,6 +24,12 @@ public class Catalog {
     @NotBlank
     private String author;
 
+    private String deweyDecimal;
+
+    @Column(length = 1000)
+    @NotBlank
+    private String description;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
 
@@ -43,10 +49,12 @@ public class Catalog {
 
     }
 
-    public Catalog(long barcode, String title, String author, LocalDate dueDate, boolean available, LibraryAccount libraryAccount, Integer renew) {
+    public Catalog(long barcode, String title, String author, String deweyDecimal, String description, LocalDate dueDate, boolean available, LibraryAccount libraryAccount, Integer renew) {
         this.barcode = barcode;
         this.title = title;
         this.author = author;
+        this.deweyDecimal = deweyDecimal;
+        this.description = description;
         this.dueDate = dueDate;
         this.available = available;
         this.libraryAccount = libraryAccount;
@@ -117,6 +125,22 @@ public class Catalog {
         this.renew = renew;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDeweyDecimal() {
+        return deweyDecimal;
+    }
+
+    public void setDeweyDecimal(String deweyDecimal) {
+        this.deweyDecimal = deweyDecimal;
+    }
+
     @Override
     public String toString() {
         return "Catalog{" +
@@ -124,8 +148,12 @@ public class Catalog {
                 ", barcode=" + barcode +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
+                ", deweyDecimal='" + deweyDecimal + '\'' +
+                ", description='" + description + '\'' +
                 ", dueDate=" + dueDate +
                 ", available=" + available +
+                ", libraryAccount=" + libraryAccount +
+                ", renew=" + renew +
                 '}';
     }
 }

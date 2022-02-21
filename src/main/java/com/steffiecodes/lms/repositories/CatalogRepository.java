@@ -11,5 +11,6 @@ public interface CatalogRepository extends JpaRepository<Catalog, Long> {
     boolean existsByBarcode(long barcode);
     Catalog findByBarcode(long barcode);
     List<Catalog> findByTitle(String title);
-    List<Catalog> findByAuthor(String Author);
+    List<Catalog> findByTitleContainingIgnoreCase(String title);
+    List<Catalog> findByAuthorContainingIgnoreCase(String Author);
 }

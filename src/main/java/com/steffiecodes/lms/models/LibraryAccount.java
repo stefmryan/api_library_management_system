@@ -45,9 +45,9 @@ public class LibraryAccount {
     @NotBlank
     private String zipCode;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-//    @JoinTable(name="COUNTY")
-    private County county;
+    @NotBlank
+
+    private String county;
 
     @ManyToOne(cascade = CascadeType.MERGE)
 //    @JoinColumn(name = "ACCOUNTTYPE")
@@ -60,7 +60,7 @@ public class LibraryAccount {
 
     }
 
-    public LibraryAccount(Integer libraryAccountNumber, String email, String firstName, String lastName, String idNumber, LocalDate birthdate, String telephone, String street, String street2, String city, String state, String zipCode, County county, AccountType accountType, List<Catalog> books) {
+    public LibraryAccount(Integer libraryAccountNumber, String email, String firstName, String lastName, String idNumber, LocalDate birthdate, String telephone, String street, String street2, String city, String state, String zipCode, String county, AccountType accountType, List<Catalog> books) {
         this.libraryAccountNumber = libraryAccountNumber;
         this.email = email;
         this.firstName = firstName;
@@ -183,11 +183,11 @@ public class LibraryAccount {
         this.zipCode = zipCode;
     }
 
-    public County getCounty() {
+    public String getCounty() {
         return county;
     }
 
-    public void setCounty(County county) {
+    public void setCounty(String county) {
         this.county = county;
     }
 

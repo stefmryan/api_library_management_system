@@ -23,10 +23,10 @@ public class CatalogServiceImpl implements CatalogService {
 
     public ResponseEntity<List<Catalog>> getItemsByTitleOrAuthor(String title, String author) {
         if (title != null) {
-            return ResponseEntity.ok(catalogRepository.findByTitle(title));
+            return ResponseEntity.ok(catalogRepository.findByTitleContainingIgnoreCase(title));
         }
         if (author != null) {
-            return ResponseEntity.ok(catalogRepository.findByAuthor(author));
+            return ResponseEntity.ok(catalogRepository.findByAuthorContainingIgnoreCase(author));
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
