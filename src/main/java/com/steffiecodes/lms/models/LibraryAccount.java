@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class LibraryAccount {
@@ -56,11 +57,14 @@ public class LibraryAccount {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Catalog> books;
 
+    @ElementCollection
+    private Set<Catalog> accountHolds;
+
     public LibraryAccount() {
 
     }
 
-    public LibraryAccount(Integer libraryAccountNumber, String email, String firstName, String lastName, String idNumber, LocalDate birthdate, String telephone, String street, String street2, String city, String state, String zipCode, String county, AccountType accountType, List<Catalog> books) {
+    public LibraryAccount(Integer libraryAccountNumber, String email, String firstName, String lastName, String idNumber, LocalDate birthdate, String telephone, String street, String street2, String city, String state, String zipCode, String county, AccountType accountType, List<Catalog> books, Set<Catalog> accountHolds) {
         this.libraryAccountNumber = libraryAccountNumber;
         this.email = email;
         this.firstName = firstName;
@@ -76,6 +80,7 @@ public class LibraryAccount {
         this.county = county;
         this.accountType = accountType;
         this.books = books;
+        this.accountHolds = accountHolds;
     }
 
     public long getId() {
@@ -207,6 +212,14 @@ public class LibraryAccount {
         this.books = books;
     }
 
+    public Set<Catalog> getAccountHolds() {
+        return accountHolds;
+    }
+
+    public void setAccountHolds(Set<Catalog> accountHolds) {
+        this.accountHolds = accountHolds;
+    }
+
     @Override
     public String toString() {
         return "LibraryAccount{" +
@@ -223,9 +236,10 @@ public class LibraryAccount {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", zipCode='" + zipCode + '\'' +
-                ", county=" + county +
+                ", county='" + county + '\'' +
                 ", accountType=" + accountType +
                 ", books=" + books +
+                ", accountHolds=" + accountHolds +
                 '}';
     }
 }
