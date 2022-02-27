@@ -8,7 +8,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 public class Catalog {
@@ -46,21 +45,11 @@ public class Catalog {
     @Max(value = 2, message = "Can only have 2 renewals")
     private Integer renew;
 
-    @ManyToMany
-            (cascade = {
-                    CascadeType.MERGE
-            })
-    @JoinTable(
-            name = "LIBRARYACCOUNT_ID",
-            joinColumns = @JoinColumn(name = "CATALOG_ID"),
-            inverseJoinColumns = @JoinColumn(name = "LIBRARYACCOUNT_ID"))
-    private List<LibraryAccount> holds;
-
     public Catalog() {
 
     }
 
-    public Catalog(long barcode, String title, String author, String deweyDecimal, String description, LocalDate dueDate, boolean available, LibraryAccount libraryAccount, Integer renew, List<LibraryAccount> holds) {
+    public Catalog(long barcode, String title, String author, String deweyDecimal, String description, LocalDate dueDate, boolean available, LibraryAccount libraryAccount, Integer renew) {
         this.barcode = barcode;
         this.title = title;
         this.author = author;
@@ -70,7 +59,6 @@ public class Catalog {
         this.available = available;
         this.libraryAccount = libraryAccount;
         this.renew = renew;
-        this.holds = holds;
     }
 
     public long getId() {
@@ -153,13 +141,6 @@ public class Catalog {
         this.deweyDecimal = deweyDecimal;
     }
 
-    public List<LibraryAccount> getHolds() {
-        return holds;
-    }
-
-    public void setHolds(List<LibraryAccount> holds) {
-        this.holds = holds;
-    }
 
     @Override
     public String toString() {
@@ -174,7 +155,6 @@ public class Catalog {
                 ", available=" + available +
                 ", libraryAccount=" + libraryAccount +
                 ", renew=" + renew +
-                ", holds=" + holds +
                 '}';
     }
 }

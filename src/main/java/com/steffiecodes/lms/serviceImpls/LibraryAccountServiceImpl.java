@@ -3,6 +3,7 @@ package com.steffiecodes.lms.serviceImpls;
 import com.steffiecodes.lms.models.Catalog;
 import com.steffiecodes.lms.models.LibraryAccount;
 import com.steffiecodes.lms.repositories.CatalogRepository;
+import com.steffiecodes.lms.repositories.HoldsRepository;
 import com.steffiecodes.lms.repositories.LibraryAccountRepository;
 import com.steffiecodes.lms.services.LibraryAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class LibraryAccountServiceImpl implements LibraryAccountService {
 
     @Autowired
     CatalogRepository catalogRepository;
+
+    @Autowired
+    HoldsRepository holdsRepository;
 
     public final boolean containsDigit(String s) {
         boolean containsDigit = false;
