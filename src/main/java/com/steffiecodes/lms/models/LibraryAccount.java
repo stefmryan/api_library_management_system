@@ -56,14 +56,18 @@ public class LibraryAccount {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Catalog> books;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Holds> holdsList;
+    @ManyToMany
+    @JoinTable(
+            name = "accountHolds_libraryAccountsHoldsList",
+            joinColumns = @JoinColumn(name = "libraryaccount_id"),
+            inverseJoinColumns = @JoinColumn(name = "holds_id"))
+    private List<Holds> accountHolds;
 
     public LibraryAccount() {
 
     }
 
-    public LibraryAccount(Integer libraryAccountNumber, String email, String firstName, String lastName, String idNumber, LocalDate birthdate, String telephone, String street, String street2, String city, String state, String zipCode, String county, AccountType accountType, List<Catalog> books, List<Holds> holdsList) {
+    public LibraryAccount(Integer libraryAccountNumber, String email, String firstName, String lastName, String idNumber, LocalDate birthdate, String telephone, String street, String street2, String city, String state, String zipCode, String county, AccountType accountType, List<Catalog> books, List<Holds> accountHolds) {
         this.libraryAccountNumber = libraryAccountNumber;
         this.email = email;
         this.firstName = firstName;
@@ -79,7 +83,7 @@ public class LibraryAccount {
         this.county = county;
         this.accountType = accountType;
         this.books = books;
-        this.holdsList = holdsList;
+        this.accountHolds = accountHolds;
     }
 
     public long getId() {
@@ -211,14 +215,6 @@ public class LibraryAccount {
         this.books = books;
     }
 
-    public List<Holds> getHoldsList() {
-        return holdsList;
-    }
-
-    public void setHoldsList(List<Holds> holdsList) {
-        this.holdsList = holdsList;
-    }
-
     @Override
     public String toString() {
         return "LibraryAccount{" +
@@ -238,7 +234,6 @@ public class LibraryAccount {
                 ", county='" + county + '\'' +
                 ", accountType=" + accountType +
                 ", books=" + books +
-                ", holdsList=" + holdsList +
                 '}';
     }
 }

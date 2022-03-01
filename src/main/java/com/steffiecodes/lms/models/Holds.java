@@ -1,10 +1,11 @@
 package com.steffiecodes.lms.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Holds {
@@ -12,31 +13,26 @@ public class Holds {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "catalog_id", referencedColumnName = "id")
-    private Catalog catalog;
-
-    @ElementCollection
-    private Set<Integer> libraryAccountNumber;
-
     private LocalDate expirationDate;
 
     private Integer total;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "CATALOG_ID")
+    private Catalog catalog;
+
+    @ManyToMany(mappedBy = "accountHolds")
     @JsonIgnore
-    @JoinColumn(name = "LIBRARYACCOUNT_ID")
-    private LibraryAccount libraryAccount;
+    private List<LibraryAccount> libraryAccountsHoldsList;
 
     public Holds() {
     }
 
-    public Holds(Catalog catalog, Set<Integer> libraryAccountNumber, LocalDate expirationDate, Integer total, LibraryAccount libraryAccount) {
-        this.catalog = catalog;
-        this.libraryAccountNumber = libraryAccountNumber;
+    public Holds(LocalDate expirationDate, Integer total, Catalog catalog, List<LibraryAccount> libraryAccountsHoldsList) {
         this.expirationDate = expirationDate;
         this.total = total;
-        this.libraryAccount = libraryAccount;
+        this.catalog = catalog;
+        this.libraryAccountsHoldsList = libraryAccountsHoldsList;
     }
 
     public long getId() {
@@ -45,22 +41,6 @@ public class Holds {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Catalog getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(Catalog catalog) {
-        this.catalog = catalog;
-    }
-
-    public Set<Integer> getLibraryAccountNumber() {
-        return libraryAccountNumber;
-    }
-
-    public void setLibraryAccountNumber(Set<Integer> libraryAccountNumber) {
-        this.libraryAccountNumber = libraryAccountNumber;
     }
 
     public LocalDate getExpirationDate() {
@@ -79,23 +59,30 @@ public class Holds {
         this.total = total;
     }
 
-    public LibraryAccount getLibraryAccount() {
-        return libraryAccount;
+    public Catalog getCatalog() {
+        return catalog;
     }
 
-    public void setLibraryAccount(LibraryAccount libraryAccount) {
-        this.libraryAccount = libraryAccount;
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    public List<LibraryAccount> getLibraryAccountsHoldsList() {
+        return libraryAccountsHoldsList;
+    }
+
+    public void setLibraryAccountsHoldsList(List<LibraryAccount> libraryAccountsHoldsList) {
+        this.libraryAccountsHoldsList = libraryAccountsHoldsList;
     }
 
     @Override
     public String toString() {
         return "Holds{" +
                 "id=" + id +
-                ", catalog=" + catalog +
-                ", libraryAccountNumber=" + libraryAccountNumber +
                 ", expirationDate=" + expirationDate +
                 ", total=" + total +
-                ", libraryAccount=" + libraryAccount +
+                ", catalog=" + catalog +
+                ", libraryAccountsHoldsList=" + libraryAccountsHoldsList +
                 '}';
     }
 }

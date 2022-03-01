@@ -8,6 +8,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Catalog {
@@ -45,11 +46,14 @@ public class Catalog {
     @Max(value = 2, message = "Can only have 2 renewals")
     private Integer renew;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Holds> catalogHolds;
+
     public Catalog() {
 
     }
 
-    public Catalog(long barcode, String title, String author, String deweyDecimal, String description, LocalDate dueDate, boolean available, LibraryAccount libraryAccount, Integer renew) {
+    public Catalog(long barcode, String title, String author, String deweyDecimal, String description, LocalDate dueDate, boolean available, LibraryAccount libraryAccount, Integer renew, List<Holds> catalogHolds) {
         this.barcode = barcode;
         this.title = title;
         this.author = author;
@@ -59,6 +63,7 @@ public class Catalog {
         this.available = available;
         this.libraryAccount = libraryAccount;
         this.renew = renew;
+        this.catalogHolds = catalogHolds;
     }
 
     public long getId() {
